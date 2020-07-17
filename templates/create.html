@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete</title>
+    <title>Create</title>
 </head>
 <body>
     <form action="" method="POST">
         {% csrf_token %}
-        <input type="submit"> Do You wanna delete record !!
-        <a href="../">Cancel</a>
+        {{form.as_p}}
+        <input type="submit">
     </form>
 </body>
 </html>

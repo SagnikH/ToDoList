@@ -1,23 +1,58 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse
+from django.views.generic import DeleteView, ListView, CreateView
 
 from .models import RecordList
 
+from .forms import RecordListForm
+
 # Create your views here.
 
-def recordListView(request) :
+# def recordListView(request) :
 
-    items = RecordList.objects.all()
+#     items = RecordList.objects.all()
 
-    return render(request, 'index.html', {'items' : items})
+#     return render(request, 'index.html', {'items' : items})
 
-def deleteView(request, id) :
 
-    item = RecordList.objects.get(id=id)
 
-    if request.method == 'POST' :
-        item.delete()
-        return redirect('/')
+# class based ListView
+class RecordListView(ListView) :
 
-    return render(request, 'delete.html', {'id' : id})
+    template_name = "index.html"
 
+    queryset = RecordList.objects.all()
+
+
+
+# def deleteView(request, id) :
+
+#     item = RecordList.objects.get(id=id)
+
+#     if request.method == 'POST' :
+#         item.delete()
+#         return redirect('/')
+
+#     return render(request, 'delete.html', {'id' : id})
+
+
+
+# this is the class based DeleteView
+class RecordDeleteView(DeleteView) :
+
+    template_name = "delete.html"
+   
+    def get_object(self) :
+       id_ = self.kwargs.get("pk")
+       return get_object_or_404(RecordList, id=id_)
+
+    def get_success_url(self) :
+        return reverse("records:todoList")
+
+
+
+class RecordCreateView(CreateView) :
+
+    template_name = "create.html"
+    form_class = RecordListForm
+    success_url = '/'
